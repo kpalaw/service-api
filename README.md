@@ -22,7 +22,7 @@ forming a deployment composed of three containers to ensure reproducibility
 and environment isolation.
 
 3.
-The solution was then deployed to Google Cloud, and a live health-check endpoint 
+The solution (for Version 1 ) was then deployed to Google Cloud, and a live health-check endpoint 
 is available here: http://35.197.251.81:8000/health
 
 4.
