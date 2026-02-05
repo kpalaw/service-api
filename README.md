@@ -23,7 +23,7 @@ and environment isolation.
 
 3.
 The solution (for Version 1 ) was then deployed to Google Cloud, and a live health-check endpoint 
-is available here: http://35.197.251.81:8000/health
+is available here: http://35.197.251.81:8000/health and api docment here: http://35.197.251.81:8000/doc#
 
 4.
 Finally, the source code for Version 1 has been published in a public Git repository 
