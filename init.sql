@@ -11,3 +11,72 @@ VALUES
  ('Investigate cash dispenser jam', 'Bob Smith', 'bob@example.com'),
  ('Software update on kiosk', 'Alice Brown', 'alice@example.com');
 
+
+
+
+CREATE TABLE IF NOT EXISTS public.customers (
+	cust_id bigserial NOT NULL,
+	cust_name text NOT NULL,
+	cust_email text NOT NULL,
+	deleted_at timestamptz NULL,
+	CONSTRAINT customers_pkey PRIMARY KEY (cust_id)
+);
+CREATE UNIQUE INDEX customers_email_active_uk ON public.customers USING btree (lower(cust_email)) WHERE (deleted_at IS NULL);
+
+CREATE TABLE IF NOT EXISTS public.jobs (
+	job_id bigserial NOT NULL,
+	job_title text NOT NULL,
+	CONSTRAINT jobs_pkey PRIMARY KEY (job_id),
+	CONSTRAINT jobs_title_uk UNIQUE (job_title)
+);
+
+CCREATE TABLE IF NOT EXISTS public.job_orders (
+    job_order_id bigserial PRIMARY KEY,
+    cust_id int8 NOT NULL,
+    job_id int8 NOT NULL,
+    created_at timestamptz NOT NULL DEFAULT now(),
+    status public."job_order_status" NOT NULL DEFAULT 'NEW'::job_order_status,
+    customer_note text,
+
+    CONSTRAINT job_orders_cust_id_fkey
+        FOREIGN KEY (cust_id)
+        REFERENCES public.customers(cust_id)
+        ON DELETE RESTRICT,
+
+    CONSTRAINT job_orders_job_id_fkey
+        FOREIGN KEY (job_id)
+        REFERENCES public.jobs(job_id)
+        ON DELETE RESTRICT
+);
+
+
+
+
+
+
+INSERT INTO public.customers (cust_name, cust_email, deleted_at) VALUES
+('Alice Morgan', 'alice.morgan@example.com', NULL),
+('Bob Smith', 'bob.smith@example.com', NULL),
+('Charlie Brown', 'charlie.brown@example.com', NULL),
+('Diana Prince', 'diana.prince@example.com', NULL),
+('Ethan Hunt', 'ethan.hunt@example.com', NULL);
+
+
+INSERT INTO public.jobs (job_title) VALUES
+('Water Tank Cleaning'),
+('Air Conditioner Maintenance'),
+('Electrical System Inspection'),
+('Plumbing Repair'),
+('General Home Maintenance');
+
+
+
+
+INSERT INTO public.job_orders (cust_id, job_id, status, customer_note) VALUES
+(1, 1, 'NEW', 'First order from Alice'),
+(2, 2, 'NEW', 'Urgent request from Bob'),
+(3, 3, 'IN_PROGRESS', 'Work started for Charlie'),
+(4, 4, 'COMPLETED', 'Finished job for Diana'),
+(5, 5, 'CANCELLED', 'Order cancelled by Ethan');
+
+
